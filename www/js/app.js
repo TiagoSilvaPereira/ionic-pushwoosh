@@ -23,10 +23,8 @@ angular.module('starter', ['ionic'])
 
 .controller('iniciarCtrl', function($scope, $window){
 
-  $scope.key = window.localStorage['token'];
-
   $scope.mostrar = function(){
-    alert('ola');
+    alert('Exemplo de ionic + pushwoosh');
   }
 
 })
