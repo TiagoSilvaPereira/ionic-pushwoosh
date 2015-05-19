@@ -1,0 +1,66 @@
+// Adicione no config.xml
+<access origin="*.pushwoosh.com" />
+
+// Arquivo que criei pushwoosh.js
+function initPushwoosh()
+{
+
+    var pushNotification = window.plugins.pushNotification;
+
+    //alert(pushNotification);
+
+    //set push notifications handler
+    document.addEventListener('push-notification', function(event) {
+        var message = event.notification.title;
+        var userData = event.notification.userdata;
+
+        if(typeof(userData) != "undefined") {
+            console.warn('user data: ' + JSON.stringify(userData));
+        }
+
+        alert(message);
+    });
+
+    // Inicializa os dados do plugin
+    pushNotification.onDeviceReady({ projectid: "159181485102", pw_appid : "2090C-63BFC" });
+
+    if(!window.localStorage['Pushwoosh']){ 
+        //Registra para os Pushs
+        pushNotification.registerDevice(
+                function(status) {
+                        var pushToken = status;
+                        console.warn('push token: ' + pushToken);
+                        alert('push token: ' + pushToken);
+                        window.localStorage['Pushwoosh'] = true;
+                        window.localStorage['token'] = pushToken;
+                },
+                function(status) {
+                        console.warn(JSON.stringify(['failed to register ', status]));
+                        alert(JSON.stringify(['failed to register ', status]));
+                }
+        );
+    }
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+// No arquivo app.js, deixei a seguinte estrutura
+
+angular.module('starter', ['ionic'])
+
+.run(function($rootScope, $state, $ionicPlatform, $window) {
+  $ionicPlatform.ready(function() {
+    
+    // Aqui chamo a função do pushwoosh
+    initPushwoosh();
+
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // for form inputs)
+    if(window.cordova && window.cordova.plugins.Keyboard) {
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    }
+    if(window.StatusBar) {
+      StatusBar.styleDefault();
+    }
+  });
+})
