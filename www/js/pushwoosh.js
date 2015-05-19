@@ -5,7 +5,7 @@ function initPushwoosh()
 
     //alert(pushNotification);
 
-    //set push notifications handler
+    // Listener que espera a chegada da notificação e roda um evento
     document.addEventListener('push-notification', function(event) {
         var message = event.notification.title;
         var userData = event.notification.userdata;
